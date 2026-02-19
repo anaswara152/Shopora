@@ -1,0 +1,144 @@
+{% extends 'admin/base.html' %}
+{% block title %}View Products{% endblock %}
+
+{% block content %}
+
+<style>
+    .product-card {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+    }
+
+    .table th {
+        background: #f8f9fc;
+        font-weight: 600;
+    }
+
+    .product-img {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 12px;
+        border: 1px solid #eee;
+    }
+
+    .btn-edit {
+        background: #4e73df;
+        color: white;
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 13px;
+        border: none;
+        text-decoration: none;
+    }
+
+    .btn-delete {
+        background: #dc3545;
+        color: white;
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 13px;
+        border: none;
+        text-decoration: none;
+    }
+
+    .btn-edit:hover,
+    .btn-delete:hover {
+        opacity: 0.9;
+        color: white;
+    }
+
+    .stock-low {
+        color: red;
+        font-weight: 600;
+    }
+</style>
+
+<div class="product-card">
+
+    <h4 class="mb-4">
+        <i class="fa-solid fa-box me-2"></i>
+        All Products
+    </h4>
+
+    <!-- Django Messages -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success rounded-pill text-center">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Size</th>
+                    <th>Fabric</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Category</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for i in n %}
+                <tr>
+                    <td>
+                        {% if i.image %}
+                            <img src="{{ i.image.url }}" class="product-img">
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
+
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.size }}</td>
+                    <td>{{ i.fabric }}</td>
+                    <td>₹{{ i.base_price }}</td>
+
+                    <td>
+                        {% if i.stock_quantity < 5 %}
+                            <span class="stock-low">
+                                {{ i.stock_quantity }} (Low)
+                            </span>
+                        {% else %}
+                            {{ i.stock_quantity }}
+                        {% endif %}
+                    </td>
+
+                    <td>{{ i.categoryid }}</td>
+
+                    <td>
+                        <a href="{% url 'productedit' i.id %}"
+                           class="btn-edit me-1">
+                            Edit
+                        </a>
+
+                        <a href="{% url 'deleteproduct' i.id %}"
+                           class="btn-delete"
+                           onclick="return confirm('Delete this product?')">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center">
+                        No Products Found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+{% endblock %}

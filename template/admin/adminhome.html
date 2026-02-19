@@ -1,0 +1,124 @@
+{% extends 'admin/base.html' %}
+{% block title %}Admin | Shopora{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        background: #f4f6fb;
+    }
+
+    .admin-wrapper {
+        margin-top: 30px;
+    }
+
+    /* Header Bar (Same Feel as User) */
+    .admin-header {
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        padding: 18px 25px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        color: white;
+    }
+
+    .admin-header h4 {
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .admin-header a {
+        color: white;
+        text-decoration: none;
+        margin-left: 20px;
+        font-weight: 500;
+    }
+
+    .admin-header a:hover {
+        opacity: 0.8;
+    }
+
+    /* Admin Cards */
+    .admin-card {
+        border: none;
+        border-radius: 20px;
+        background: #ffffff;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+        transition: 0.3s;
+        padding: 30px;
+    }
+
+    .admin-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+
+    .admin-icon {
+        font-size: 28px;
+        margin-bottom: 15px;
+    }
+
+    .btn-admin {
+        border-radius: 30px;
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        border: none;
+        font-size: 14px;
+        font-weight: 600;
+    }
+</style>
+
+<div class="container admin-wrapper">
+    <div class="row g-4">
+
+        <div class="col-md-4">
+            <div class="admin-card text-center">
+                <div class="admin-icon text-primary">
+                    <i class="fa-solid fa-plus"></i>
+                </div>
+                <h6 class="fw-bold">Add Product</h6>
+                <p class="text-muted small">
+                    Create new product listings
+                </p>
+                <a href="{% url 'productadd' %}"
+                   class="btn btn-admin text-white w-100 mt-2">
+                    Add Product
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="admin-card text-center">
+                <div class="admin-icon text-success">
+                    <i class="fa-solid fa-box"></i>
+                </div>
+                <h6 class="fw-bold">View Products</h6>
+                <p class="text-muted small">
+                    Manage and update products
+                </p>
+                <a href="{% url 'viewproduct' %}"
+                   class="btn btn-admin text-white w-100 mt-2">
+                    View Products
+                </a>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="admin-card text-center">
+                <div class="admin-icon text-warning">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                </div>
+                <h6 class="fw-bold">Manage Orders</h6>
+                <p class="text-muted small">
+                    Track customer orders
+                </p>
+                <a href="{% url 'admin_orders' %}"
+                   class="btn btn-admin text-white w-100 mt-2">
+                    View Orders
+                </a>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

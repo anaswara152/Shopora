@@ -1,0 +1,189 @@
+{% extends 'user/base.html' %}
+{% block title %}Your Cart | Shopora{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        background: #f4f6fb;
+    }
+
+    .cart-wrapper {
+        padding: 50px 0;
+        min-height: 80vh;
+    }
+
+    .cart-item {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        transition: 0.3s;
+    }
+
+    .cart-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    }
+
+    .cart-img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 12px;
+    }
+
+    .product-name {
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .price {
+        font-weight: 500;
+        color: #6f42c1;
+    }
+
+    .btn-remove {
+        border-radius: 30px;
+        font-size: 13px;
+        padding: 5px 15px;
+    }
+
+    .summary-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+        position: sticky;
+        top: 100px;
+    }
+
+    .summary-title {
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .btn-checkout {
+        border-radius: 30px;
+        padding: 10px;
+        font-weight: 600;
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        border: none;
+        color: white;
+        width: 100%;
+    }
+
+    .btn-checkout:hover {
+        opacity: 0.9;
+    }
+</style>
+
+<div class="container cart-wrapper">
+
+    <h4 class="mb-4 fw-bold">Your Shopping Cart</h4>
+
+    <div class="row">
+
+        <!-- 🛒 Cart Items -->
+        <div class="col-md-8">
+
+            {% if n %}
+
+            <form method="POST" action="{% url 'payment_page' %}">
+                {% csrf_token %}
+
+                {% for c in n %}
+                <div class="cart-item d-flex align-items-center justify-content-between">
+
+                    <div class="d-flex align-items-center gap-3">
+
+                        {% if c.productid.image %}
+                            <img src="{{ c.productid.image.url }}"
+                                 class="cart-img">
+                        {% endif %}
+
+                        <div>
+                            <div class="product-name">
+                                {{ c.productid.name }}
+                            </div>
+                            <div class="text-muted small">
+                                Quantity: {{ c.count }}
+                            </div>
+                            <div class="price">
+                                ₹ {{ c.price }} each
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="text-end">
+                        <div class="fw-bold mb-2">
+                            ₹ {{ c.total }}
+                        </div>
+
+                        <a href="{% url 'deletecart' c.id %}"
+                           class="btn btn-outline-danger btn-sm btn-remove">
+                            Remove
+                        </a>
+                    </div>
+
+                    <!-- Hidden inputs -->
+                    <input type="hidden" name="productid" value="{{ c.productid.id }}">
+                    <input type="hidden" name="count" value="{{ c.count }}">
+
+                </div>
+                {% endfor %}
+
+                <!-- Checkout Button for mobile -->
+                <div class="d-md-none mt-3">
+                    <button type="submit" class="btn btn-checkout">
+                        Proceed to Checkout
+                    </button>
+                </div>
+
+            {% else %}
+                <div class="text-center text-muted mt-5">
+                    Your cart is empty.
+                </div>
+            {% endif %}
+
+        </div>
+
+        <!-- 💳 Order Summary -->
+        {% if n %}
+        <div class="col-md-4">
+
+            <div class="summary-card">
+
+                <div class="summary-title">
+                    Order Summary
+                </div>
+
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Total Items</span>
+                    <span>{{ n|length }}</span>
+                </div>
+
+                <div class="d-flex justify-content-between mb-3">
+                    <span>Grand Total</span>
+                    <strong>₹ {{ gr }}</strong>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-checkout d-none d-md-block">
+                    Proceed to Checkout
+                </button>
+
+            </div>
+
+        </div>
+        {% endif %}
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

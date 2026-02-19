@@ -1,0 +1,166 @@
+{% extends 'user/base.html' %}
+{% block title %}My Orders | Shopora{% endblock %}
+
+{% block content %}
+
+<style>
+    .orders-wrapper {
+        padding: 50px 0;
+        min-height: 80vh;
+    }
+
+    .order-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+        margin-bottom: 25px;
+        overflow: hidden;
+    }
+
+    .order-header {
+        background: #f8f9fc;
+        padding: 15px 25px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        border-bottom: 1px solid #eee;
+    }
+
+    .order-body {
+        padding: 20px 25px;
+    }
+
+    .order-product {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 15px;
+    }
+
+    .order-product img {
+        width: 90px;
+        height: 90px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .order-status {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .status-delivered {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .status-pending {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .status-cancelled {
+        background: #f8d7da;
+        color: #721c24;
+    }
+</style>
+
+<div class="container orders-wrapper">
+
+    <h3 class="text-center mb-4 fw-bold text-primary">
+        <i class="fa-solid fa-box-open me-2"></i>
+        My Orders
+    </h3>
+
+    {% if orders %}
+
+        {% for order in orders %}
+        <div class="order-card">
+
+<div class="order-header">
+
+    <!-- Left Side -->
+    <div>
+        <strong>Order ID:</strong> #{{ order.id }} <br>
+        <small class="text-muted">
+            Placed on {{ order.created_at }}
+        </small>
+    </div>
+
+    <!-- Right Side -->
+    <div class="text-end">
+        <strong>Total:</strong> ₹ {{ order.total_amount }} <br>
+
+        {% if order.order_status == "COMPLETED" %}
+            <span class="order-status status-delivered">
+                Delivered
+            </span>
+        {% elif order.order_status == "PROCESSING" %}
+            <span class="order-status status-pending">
+                Processing
+            </span>
+        {% elif order.order_status == 'PENDING' %}
+            <span class="order-status status-pending">
+                Pending
+            </span>
+        {% else %}
+            <span class="order-status status-cancelled">
+                Cancelled
+            </span>
+        {% endif %}
+
+        <div class="mt-2">
+            <a href="{% url 'my_order_details' order.id %}"
+               class="btn btn-sm btn-outline-primary">
+                <i class="fa-solid fa-eye me-1"></i>
+                View Details
+            </a>
+        </div>
+    </div>
+
+</div>
+
+
+            <!-- Order Body -->
+            <div class="order-body">
+
+                {% for item in order.items.all %}
+                <div class="order-product">
+
+                    <img src="{{ item.product.image.url }}">
+
+                    <div>
+                        <h6 class="mb-1">
+                            {{ item.product.name }}
+                        </h6>
+                        <small class="text-muted">
+                            Quantity: {{ item.quantity }}
+                        </small><br>
+                        <strong>₹ {{ item.price }}</strong>
+                    </div>
+                   
+
+                </div>
+                                   
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+    {% else %}
+        <div class="text-center mt-5">
+            <h5 class="text-muted">You haven’t placed any orders yet 📦</h5>
+            <a href="{% url 'userhome' %}" class="btn btn-primary mt-3">
+                Continue Shopping
+            </a>
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

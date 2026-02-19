@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Shopora{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f7fb;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(90deg, #4e73df, #6f42c1);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 22px;
+            color: #fff !important;
+        }
+
+        .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            margin-right: 15px;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            opacity: 0.8;
+        }
+
+        .btn-custom {
+            border-radius: 30px;
+            padding: 6px 20px;
+            font-weight: 500;
+        }
+
+        .btn-login {
+            background: white;
+            color: #4e73df;
+            border: none;
+        }
+
+        .btn-login:hover {
+            background: #f1f1f1;
+        }
+
+        .btn-register {
+            background: #ffb703;
+            border: none;
+            color: #000;
+        }
+
+        .btn-register:hover {
+            background: #ffa200;
+        }
+
+        /* Content */
+        .main-content {
+            min-height: 80vh;
+            padding: 50px 0;
+        }
+
+        /* Footer */
+.premium-footer {
+    background: linear-gradient(135deg, #4e73df, #6f42c1);
+    color: white;
+    padding: 70px 0 25px 0;
+    margin-top: 80px;
+}
+
+.footer-brand {
+    font-weight: 700;
+}
+
+.footer-heading {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.footer-text {
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.premium-footer a {
+    color: #f1f1f1;
+    text-decoration: none;
+    font-size: 14px;
+    display: block;
+    margin-bottom: 8px;
+    transition: 0.3s;
+}
+
+.premium-footer a:hover {
+    color: #ffb703;
+}
+
+.footer-divider {
+    border-color: rgba(255,255,255,0.3);
+    margin: 40px 0 20px;
+}
+
+.footer-input {
+    border-radius: 30px;
+    border: none;
+    padding-left: 15px;
+}
+
+.footer-btn {
+    border-radius: 30px;
+    background: #ffb703;
+    border: none;
+    font-weight: 600;
+}
+
+.footer-btn:hover {
+    background: #ffa200;
+}
+    </style>
+</head>
+<body>
+
+<!-- 🔷 Navbar -->
+<nav class="navbar navbar-expand-lg shadow-sm">
+    <div class="container">
+        
+        <!-- Logo Left -->
+        <a class="navbar-brand" href="#">Shopora</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Right Side Menu -->
+        <div class="collapse navbar-collapse justify-content-end" id="navbarContent">
+            
+            <ul class="navbar-nav align-items-center">
+
+                <li class="nav-item">
+                    <a class="nav-link text-white me-3" href="{% url 'home' %}">
+                        Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'login_user' %}" 
+                       class="btn btn-light btn-sm rounded-pill me-2">
+                        Login
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'registration' %}" 
+                       class="btn btn-warning btn-sm rounded-pill">
+                        Register
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+<!-- 🔷 Page Content -->
+<div class="container main-content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- 🔷 Footer -->
+<footer class="premium-footer">
+    <div class="container">
+        <div class="row gy-4">
+
+            <!-- Brand -->
+            <div class="col-md-4">
+                <h4 class="footer-brand">Shopora</h4>
+                <p class="footer-text">
+                    Discover premium fashion dress
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="col-md-2">
+                <h6 class="footer-heading">Company</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="#">Products</a></li>
+                    <li><a href="#">Categories</a></li>
+                </ul>
+            </div>
+
+            <!-- Account -->
+            <div class="col-md-3">
+                <h6 class="footer-heading">Account</h6>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'login_user' %}">Login</a></li>
+                    <li><a href="{% url 'registration' %}">Register</a></li>
+                    <li><a href="#">Orders</a></li>
+                </ul>
+            </div>
+
+            <!-- Newsletter -->
+            <div class="col-md-3">
+                <h6 class="footer-heading">Newsletter</h6>
+                <p class="footer-text small">
+                    Get updates about new arrivals & offers.
+                </p>
+            </div>
+
+        </div>
+
+        <hr class="footer-divider">
+
+        <div class="text-center small">
+            © 2026 Shopora. All Rights Reserved.
+        </div>
+    </div>
+</footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

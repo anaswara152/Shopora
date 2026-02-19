@@ -1,0 +1,157 @@
+{% extends 'user/base.html' %}
+{% block title %}My Profile | Shopora{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        background: #f4f6fb;
+    }
+
+    .profile-wrapper {
+        padding: 60px 0;
+        min-height: 80vh;
+    }
+
+    .profile-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .profile-header {
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        padding: 30px;
+        text-align: center;
+        color: white;
+    }
+
+    .profile-header h4 {
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .profile-body {
+        padding: 30px;
+    }
+
+    .profile-info {
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .profile-label {
+        font-weight: 600;
+        color: #555;
+    }
+
+    .btn-edit {
+        border-radius: 30px;
+        padding: 8px 25px;
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        border: none;
+        color: white;
+        font-weight: 500;
+    }
+
+    .btn-edit:hover {
+        opacity: 0.9;
+    }
+    .btn-home {
+    border-radius: 30px;
+    padding: 8px 25px;
+    background: #f8f9fa;
+    border: 1px solid #ddd;
+    font-weight: 500;
+    color: #333;
+}
+
+.btn-home:hover {
+    background: #e9ecef;
+}
+</style>
+
+<div class="container profile-wrapper">
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="profile-card">
+
+                <!-- Header -->
+                <div class="profile-header">
+                    <h4>
+                        <i class="fa-solid fa-user me-2"></i>
+                        My Profile
+                    </h4>
+                </div>
+
+                <!-- Body -->
+                <div class="profile-body">
+
+                    <div class="profile-info">
+                        <span class="profile-label">Username:</span>
+                        {{ request.user.username }}
+                    </div>
+
+                    <div class="profile-info">
+                        <span class="profile-label">First Name:</span>
+                        {{ request.user.first_name }}
+                    </div>
+
+                    <div class="profile-info">
+                        <span class="profile-label">Last Name:</span>
+                        {{ request.user.last_name }}
+                    </div>
+
+                    <div class="profile-info">
+                        <span class="profile-label">Email:</span>
+                        {{ request.user.email }}
+                    </div>
+
+                    <div class="profile-info">
+                        <span class="profile-label">Address:</span>
+                        {{ profile.address }}
+                    </div>
+
+                    <div class="profile-info">
+                        <span class="profile-label">City:</span>
+                        {{ profile.city }}
+                    </div>
+
+                    <div class="profile-info">
+                        <span class="profile-label">State:</span>
+                        {{ profile.state }}
+                    </div>
+
+                    <div class="profile-info">
+                        <span class="profile-label">Postal Code:</span>
+                        {{ profile.postalcode }}
+                    </div>
+
+                    <div class="text-center mt-4">
+
+    <a href="{% url 'edit_profile' %}" class="btn btn-edit me-2">
+        <i class="fa-solid fa-pen-to-square me-1"></i>
+        Edit Profile
+    </a>
+
+    <a href="{% url 'userhome' %}" class="btn btn-home">
+        <i class="fa-solid fa-house me-1"></i>
+        Back to Home
+    </a>
+
+</div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

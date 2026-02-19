@@ -1,0 +1,120 @@
+{% extends 'common/base.html' %}
+{% block title %}Login | Shopora{% endblock %}
+
+{% block content %}
+
+<style>
+    .login-wrapper {
+        min-height: 85vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-card {
+        width: 380px;
+        border: none;
+        border-radius: 18px;
+        padding: 35px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        background: #ffffff;
+    }
+
+    .login-title {
+        font-weight: 600;
+        margin-bottom: 25px;
+    }
+
+    .form-control {
+        border-radius: 30px;
+        padding: 10px 20px;
+        border: 1px solid #ddd;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #6f42c1;
+    }
+
+    .btn-login {
+        border-radius: 30px;
+        padding: 10px;
+        font-weight: 600;
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        border: none;
+        transition: 0.3s;
+    }
+
+    .btn-login:hover {
+        opacity: 0.9;
+    }
+
+    .login-links a {
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+    .login-links a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<div class="login-wrapper">
+
+    <div class="login-card">
+
+        <h4 class="text-center login-title">Login</h4>
+
+        <!-- Messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger text-center py-2 rounded-pill">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <input type="text"
+                       name="username"
+                       class="form-control"
+                       placeholder="Username"
+                       required>
+            </div>
+
+            <div class="mb-4">
+                <input type="password"
+                       name="password"
+                       class="form-control"
+                       placeholder="Password"
+                       required>
+            </div>
+
+            <button type="submit" class="btn btn-login w-100 text-white">
+                Login
+            </button>
+        </form>
+
+        <div class="text-center mt-3 login-links">
+            <a href="{% url 'forgot_password' %}" class="small text-muted">
+                Forgot Password?
+            </a>
+        </div>
+
+        <div class="text-center mt-2 login-links">
+            <small class="text-muted">
+                Don’t have an account?
+                <a href="{% url 'registration' %}" class="fw-semibold">
+                    Register
+                </a>
+            </small>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

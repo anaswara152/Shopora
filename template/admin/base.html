@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Admin | Shopora{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f4f6fb;
+        }
+
+        /* 🔷 Admin Navbar */
+        .admin-navbar {
+            background: linear-gradient(90deg, #4e73df, #6f42c1);
+            padding: 15px 0;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        .admin-navbar .navbar-brand {
+            font-weight: 600;
+            font-size: 20px;
+            color: #fff !important;
+        }
+
+        .admin-navbar .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            margin-right: 15px;
+            transition: 0.3s;
+        }
+
+        .admin-navbar .nav-link:hover {
+            opacity: 0.8;
+        }
+
+        .btn-logout {
+            background: white;
+            color: #4e73df;
+            border-radius: 30px;
+            padding: 6px 18px;
+            font-weight: 500;
+            border: none;
+        }
+
+        .btn-logout:hover {
+            background: #f1f1f1;
+        }
+
+        /* 🔷 Page Content */
+        .main-content {
+            min-height: 80vh;
+            padding: 50px 0;
+        }
+
+        /* 🔷 Footer */
+        footer {
+            background: #ffffff;
+            border-top: 1px solid #eaeaea;
+            padding: 20px 0;
+            text-align: center;
+            color: #555;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 🔷 Admin Navbar -->
+<nav class="navbar navbar-expand-lg admin-navbar">
+    <div class="container">
+
+        <a class="navbar-brand" href="#">
+            <i class="fa-solid fa-user-shield me-2"></i>
+            Admin Panel
+        </a>
+
+        <div class="ms-auto d-flex align-items-center">
+            <a href="{% url 'adminhome' %}" class="nav-link">
+                Home
+            </a>
+
+            <a href="{% url 'productadd' %}" class="nav-link">
+                Add Product
+            </a>
+
+            <a href="{% url 'viewproduct' %}" class="nav-link">
+                Products
+            </a>
+
+            <a href="{% url 'admin_orders' %}" class="nav-link">
+                Orders
+            </a>
+
+            <a href="{% url 'logoutuser' %}" class="btn btn-logout ms-3">
+                Logout
+            </a>
+
+        </div>
+
+    </div>
+</nav>
+
+<!-- 🔷 Page Content -->
+<div class="container main-content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- 🔷 Footer -->
+<footer>
+    © 2026 Shopora Admin | Designed with ❤
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

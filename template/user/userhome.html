@@ -1,0 +1,260 @@
+{% extends 'user/base.html' %}
+{% block title %}Shop | Shopora{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        background: #f4f6fb;
+    }
+
+    /* Navbar Style */
+    .shop-navbar {
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        padding: 12px 20px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+    }
+
+    .shop-navbar a {
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        margin-left: 18px;
+    }
+
+    .shop-navbar a:hover {
+        opacity: 0.8;
+    }
+
+    /* Filter Card */
+    .filter-card {
+        border: none;
+        border-radius: 18px;
+        padding: 25px;
+        background: #ffffff;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+    }
+
+    .filter-card h5 {
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .form-control,
+    .form-select {
+        border-radius: 30px;
+        padding: 8px 18px;
+        border: 1px solid #ddd;
+    }
+
+    .form-control:focus,
+    .form-select:focus {
+        box-shadow: none;
+        border-color: #6f42c1;
+    }
+
+    .btn-filter {
+        border-radius: 30px;
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        border: none;
+        font-weight: 600;
+    }
+
+    /* Product Card */
+    .product-card {
+        border: none;
+        border-radius: 20px;
+        transition: 0.3s;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    }
+
+    .product-img {
+        height: 220px;
+        object-fit: cover;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+    }
+
+    .wishlist-heart {
+        position: absolute;
+        top: 12px;
+        right: 15px;
+        font-size: 20px;
+    }
+
+    .wishlist-heart i {
+        color: #ccc;
+        transition: 0.3s;
+    }
+
+    .wishlist-heart.active i {
+        color: #e63946;
+    }
+
+    .btn-add {
+        border-radius: 30px;
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        border: none;
+        font-size: 14px;
+    }
+
+    .btn-details {
+        border-radius: 30px;
+        font-size: 14px;
+    }
+
+</style>
+
+<div class="container mt-4">
+
+    <!-- 🌟 Gradient Navbar -->
+     {% if messages %}
+    <div class="container mt-3">
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show text-center shadow-sm rounded-pill">
+                {{ message }}
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+    <div class="row">
+
+        <!-- 🎯 Filters -->
+        <div class="col-md-3">
+            <div class="filter-card">
+
+                <h5>Filters</h5>
+
+                <form method="GET">
+
+                    <div class="mb-3">
+                        <input type="text" name="search"
+                               class="form-control"
+                               placeholder="Search product"
+                               value="{{ request.GET.search }}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="" class="mb-2">Size</label>
+                        <select name="size" id="size" class="form-select">
+                            <option value="">All Size</option>
+                            <option value="XS">XS</option>
+                            <option value="S">S</option>
+                            <option value="M">M</option>
+                            <option value="L">L</option>
+                            <option value="XL">XL</option>
+                            <option value="2-3Y, 3-4Y-5Y">2-3Y, 3-4Y-5Y</option>
+                            <option value="3-4Y, 4-5Y, 5-6Y">3-4Y, 4-5Y, 5-6Y</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="mb-2">Category</label>
+                        <select name="category" class="form-select">
+                            <option value="">All</option>
+                            {% for cat in categories %}
+                                <option value="{{ cat.id }}"
+                                {% if request.GET.category == cat.id|stringformat:"s" %}
+                                    selected
+                                {% endif %}>
+                                    {{ cat.cname }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="submit"
+                            class="btn btn-filter w-100 text-white">
+                        Apply Filters
+                    </button>
+
+                </form>
+            </div>
+        </div>
+
+        <!-- 🛍 Product Section -->
+        <div class="col-md-9">
+            <div class="row g-4">
+
+                {% for product in m %}
+                <div class="col-md-4">
+
+                    <div class="card product-card h-100 position-relative">
+
+                        <!-- Wishlist -->
+                        <a href="{% url 'toggle_wishlist' product.id %}"
+                           class="wishlist-heart {% if product.id in user_wishlist_ids %}active{% endif %}">
+                            {% if product.id in user_wishlist_ids %}
+                                <i class="fa-solid fa-heart"></i>
+                            {% else %}
+                                <i class="fa-regular fa-heart"></i>
+                            {% endif %}
+                        </a>
+
+                        {% if product.image %}
+                            <img src="{{ product.image.url }}"
+                                 class="card-img-top product-img">
+                        {% endif %}
+
+                        <div class="card-body text-center">
+
+                            <h6 class="fw-bold">{{ product.name }}</h6>
+                            <p class="text-muted small">
+                                {{ product.categoryid.cname }}
+                            </p>
+
+                            {% if product.stock_quantity == 0 %}
+                                <span class="badge bg-danger mb-2">
+                                    Out of Stock
+                                </span>
+                            {% else %}
+                                <form method="POST"
+                                      action="{% url 'addcart' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden"
+                                           name="productid"
+                                           value="{{ product.id }}">
+                                    <input type="hidden"
+                                           name="count"
+                                           value="1">
+
+                                    <button type="submit"
+                                            class="btn btn-add btn-sm w-100 text-white">
+                                        Add to Cart
+                                    </button>
+                                </form>
+                            {% endif %}
+
+                            <a href="{% url 'deatiles' product.id %}"
+                               class="btn btn-outline-secondary btn-details btn-sm w-100 mt-2">
+                                View Details
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                {% empty %}
+                    <p>No products found.</p>
+                {% endfor %}
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

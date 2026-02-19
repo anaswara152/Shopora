@@ -1,0 +1,29 @@
+{% extends 'user/base.html' %}
+
+{% block title %}Order Confirmed{% endblock %}
+
+{% block content %}
+
+<div class="card shadow-sm p-4 text-center" style="width: 450px;">
+
+    <h4 class="text-primary mb-3">Order Confirmed 📦</h4>
+
+    <p>Your order has been placed successfully!</p>
+
+    <hr>
+
+    <p><strong>Order ID:</strong> {{ order.id }}</p>
+    <p><strong>Payment Method:</strong> Cash On Delivery</p>
+    <p><strong>Total Amount:</strong> ₹{{ order.total_price }}</p>
+
+    <p class="text-muted small mt-2">
+        Please check your order details in My Orders section.
+    </p>
+
+    <a href="{% url 'my_orders' %}" class="btn btn-primary mt-3">
+        Check Order Details
+    </a>
+
+</div>
+
+{% endblock %}

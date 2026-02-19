@@ -1,0 +1,166 @@
+{% extends 'common/base.html' %}
+{% block title %}Register | Shopora{% endblock %}
+
+{% block content %}
+
+<style>
+    .register-wrapper {
+        min-height: 90vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 40px 0;
+    }
+
+    .register-card {
+        width: 650px;
+        border: none;
+        border-radius: 20px;
+        padding: 40px;
+        background: #ffffff;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    .register-title {
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+
+    .form-control {
+        border-radius: 30px;
+        padding: 10px 18px;
+        border: 1px solid #ddd;
+    }
+
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #6f42c1;
+    }
+
+    textarea.form-control {
+        border-radius: 15px;
+        resize: none;
+    }
+
+    .btn-register {
+        border-radius: 30px;
+        padding: 12px;
+        font-weight: 600;
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        border: none;
+        transition: 0.3s;
+    }
+
+    .btn-register:hover {
+        opacity: 0.9;
+    }
+</style>
+
+<div class="register-wrapper">
+
+    <div class="register-card">
+
+        <h4 class="text-center register-title">Create Your Account</h4>
+             {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger text-center py-2 rounded-pill">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <input type="text" name="username"
+                           class="form-control"
+                           placeholder="Username" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <input type="email" name="email"
+                           class="form-control"
+                           placeholder="Email" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <input type="text" name="first_name"
+                           class="form-control"
+                           placeholder="First Name"
+                           pattern="[A-Za-z]+" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <input type="text" name="last_name"
+                           class="form-control"
+                           placeholder="Last Name"
+                           pattern="[A-Za-z]+" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <input type="tel" name="phone"
+                           class="form-control"
+                           placeholder="Phone (10 digits)"
+                           pattern="[0-9]{10}" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <input type="text" name="state"
+                           class="form-control"
+                           placeholder="State" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <input type="text" name="city"
+                           class="form-control"
+                           placeholder="City" required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <input type="text" name="postalcode"
+                           class="form-control"
+                           placeholder="Postal Code"
+                           pattern="[0-9]+" required>
+                </div>
+
+                <div class="col-12 mb-3">
+                    <textarea name="address"
+                              class="form-control"
+                              rows="3"
+                              placeholder="Address"
+                              required></textarea>
+                </div>
+
+                <div class="col-12 mb-4">
+                    <input type="password" name="password"
+                           class="form-control"
+                           placeholder="Password (6-10 characters)"
+                           minlength="6" maxlength="10" required>
+                </div>
+
+                <div class="col-12">
+                    <button type="submit"
+                            class="btn btn-register w-100 text-white">
+                        Register
+                    </button>
+                </div>
+            </div>
+
+        </form>
+
+        <div class="text-center mt-3">
+            <small class="text-muted">
+                Already have an account?
+                <a href="{% url 'login_user' %}" class="fw-semibold text-decoration-none">
+                    Login
+                </a>
+            </small>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

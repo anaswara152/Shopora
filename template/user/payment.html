@@ -1,0 +1,115 @@
+{% extends 'user/base.html' %}
+{% block title %}Payment | Shopora{% endblock %}
+
+{% block content %}
+
+<style>
+    .payment-wrapper {
+        padding: 60px 0;
+        min-height: 80vh;
+    }
+
+    .payment-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+        padding: 40px;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .total-box {
+        background: #f8f9fc;
+        padding: 15px 20px;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+
+    .payment-option {
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 15px 20px;
+        margin-bottom: 15px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .payment-option:hover {
+        border-color: #6f42c1;
+        background: #f9f7ff;
+    }
+
+    .payment-option input {
+        margin-right: 10px;
+    }
+
+    .btn-proceed {
+        width: 100%;
+        border-radius: 30px;
+        padding: 10px;
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        border: none;
+        color: white;
+        font-weight: 600;
+        font-size: 16px;
+        margin-top: 15px;
+    }
+
+    .btn-proceed:hover {
+        opacity: 0.9;
+    }
+</style>
+
+<div class="container payment-wrapper">
+
+    <div class="payment-card">
+
+        <h4 class="fw-bold mb-4 text-center">
+            <i class="fa-solid fa-credit-card me-2"></i>
+            Select Payment Method
+        </h4>
+
+        <div class="total-box text-center">
+            Total Amount: ₹ {{ grand_total }}
+        </div>
+
+        <form method="POST" action="{% url 'process_payment' %}">
+            {% csrf_token %}
+
+            {% for item in cart_items %}
+                <input type="hidden" name="productid" value="{{ item.product.id }}">
+                <input type="hidden" name="quantity" value="{{ item.quantity }}">
+            {% endfor %}
+
+            <label class="payment-option d-block">
+                <input type="radio" name="payment_method" value="UPI" required>
+                <strong>UPI</strong>
+                <div class="text-muted small">Pay instantly using any UPI app</div>
+            </label>
+
+            <label class="payment-option d-block">
+                <input type="radio" name="payment_method" value="CARD">
+                <strong>Debit / Credit Card</strong>
+                <div class="text-muted small">Visa, MasterCard, RuPay supported</div>
+            </label>
+
+            <label class="payment-option d-block">
+                <input type="radio" name="payment_method" value="COD">
+                <strong>Cash On Delivery</strong>
+                <div class="text-muted small">Pay when product is delivered</div>
+            </label>
+
+            <button type="submit" class="btn btn-proceed">
+                <i class="fa-solid fa-lock me-1"></i>
+                Proceed to Payment
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

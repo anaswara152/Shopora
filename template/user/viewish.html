@@ -1,0 +1,209 @@
+{% extends 'user/base.html' %}
+{% block title %}My Wishlist | Shopora{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        background: #f4f6fb;
+    }
+
+    .wishlist-wrapper {
+        padding: 50px 0;
+        min-height: 80vh;
+    }
+
+    .wishlist-title {
+        font-weight: 600;
+        margin-bottom: 30px;
+    }
+
+    .wishlist-item {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        transition: 0.3s;
+    }
+
+    .wishlist-item:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    }
+
+    .wishlist-left {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .wishlist-img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 15px;
+    }
+
+    .product-name {
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .price {
+        color: #6f42c1;
+        font-weight: 600;
+    }
+
+    .btn-cart {
+        border-radius: 30px;
+        padding: 8px 18px;
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        border: none;
+        color: white;
+        font-size: 14px;
+    }
+
+    .btn-remove {
+        border-radius: 30px;
+        font-size: 13px;
+        padding: 6px 16px;
+    }
+
+    .empty-box {
+        background: #ffffff;
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+    }
+    
+    .wishlist-heading {
+    font-weight: 700;
+    background: linear-gradient(90deg, #4e73df, #6f42c1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.wishlist-heading i {
+    color: #e63946;
+}
+
+.heading-line {
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #4e73df, #6f42c1);
+    margin: 10px auto 0;
+    border-radius: 10px;
+}
+.wishlist-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    min-width: 170px;
+}
+
+.btn-action {
+    border-radius: 30px;
+    padding: 8px 15px;
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+}
+
+
+</style>
+
+<div class="container wishlist-wrapper">
+
+<div class="text-center mb-4">
+    <h3 class="wishlist-heading">
+        <i class="fa-solid fa-heart me-2"></i>
+        My Wishlist
+    </h3>
+    <div class="heading-line"></div>
+</div>
+
+    {% if w %}
+
+        {% for item in w %}
+        <div class="wishlist-item">
+
+            <div class="wishlist-left">
+
+                {% if item.productid.image %}
+                <img src="{{ item.productid.image.url }}"
+                     class="wishlist-img">
+                {% endif %}
+
+                <div>
+                    <div class="product-name">
+                        {{ item.productid.name }}
+                    </div>
+
+                    <div class="text-muted small mb-2">
+                        {{ item.productid.categoryid.cname }}
+                    </div>
+
+                    <div class="price">
+                        ₹ {{ item.productid.base_price }}
+                    </div>
+                </div>
+
+            </div>
+
+<div class="wishlist-actions">
+
+    <a href="{% url 'deatiles' item.productid.id %}"
+       class="btn btn-outline-secondary btn-action">
+        <i class="fa-solid fa-eye me-1"></i>
+        View Details
+    </a>
+
+    <form method="POST" action="{% url 'addcart' %}" class="w-100">
+        {% csrf_token %}
+        <input type="hidden" name="productid" value="{{ item.productid.id }}">
+        <input type="hidden" name="count" value="1">
+
+        <button type="submit" class="btn btn-cart btn-action w-100">
+            <i class="fa-solid fa-cart-plus me-1"></i>
+            Add to Cart
+        </button>
+    </form>
+
+    <a href="{% url 'removewish' item.id %}"
+       class="btn btn-outline-danger btn-action">
+        <i class="fa-solid fa-trash me-1"></i>
+        Remove
+    </a>
+
+</div>
+
+
+        </div>
+        {% endfor %}
+
+    {% else %}
+
+        <div class="text-center mt-5">
+            <div class="empty-box d-inline-block">
+
+                <h5 class="text-muted mb-3">
+                    Your wishlist is empty 💔
+                </h5>
+
+                <a href="{% url 'userhome' %}"
+                   class="btn btn-cart px-4">
+                    Continue Shopping
+                </a>
+
+            </div>
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}

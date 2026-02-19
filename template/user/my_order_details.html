@@ -1,0 +1,154 @@
+{% extends 'user/base.html' %}
+{% block title %}Order Details | Shopora{% endblock %}
+
+{% block content %}
+
+<style>
+    .details-wrapper {
+        padding: 50px 0;
+        min-height: 80vh;
+    }
+
+    .details-card {
+        background: #fff;
+        border-radius: 18px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+        padding: 25px;
+        margin-bottom: 25px;
+    }
+
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .badge-success { background: #d4edda; color: #155724; }
+    .badge-warning { background: #fff3cd; color: #856404; }
+    .badge-danger  { background: #f8d7da; color: #721c24; }
+
+    .product-row {
+        border-bottom: 1px solid #eee;
+        padding: 15px 0;
+    }
+
+    .product-row img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 10px;
+    }
+
+    .btn-cancel {
+        background: #dc3545;
+        color: white;
+        border-radius: 30px;
+        padding: 6px 20px;
+        border: none;
+    }
+
+    .btn-cancel:hover {
+        opacity: 0.9;
+    }
+
+    .btn-back {
+        border-radius: 30px;
+        padding: 6px 20px;
+        border: 1px solid #ccc;
+        background: #f8f9fa;
+    }
+</style>
+
+<div class="container details-wrapper">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h4 class="fw-bold">
+            <i class="fa-solid fa-receipt me-2"></i>
+            Order Details - #{{ order.id }}
+        </h4>
+
+        <a href="{% url 'my_orders' %}" class="btn btn-back">
+            <i class="fa-solid fa-arrow-left me-1"></i>
+            Back to Orders
+        </a>
+    </div>
+
+    <!-- Order Summary -->
+    <div class="details-card">
+        <div class="row">
+            <div class="col-md-6">
+                <p><strong>Total Price:</strong> ₹ {{ order.total_price }}</p>
+                <p><strong>Payment Method:</strong> {{ order.payment_method }}</p>
+                <p><strong>Payment Status:</strong> {{ order.payment_status }}</p>
+            </div>
+
+            <div class="col-md-6 text-md-end">
+                <p>
+                    <strong>Order Status:</strong>
+                    {% if order.order_status == "COMPLETED" %}
+                        <span class="status-badge badge-success">Delivered</span>
+                    {% elif order.order_status == "PROCESSING" %}
+                        <span class="status-badge badge-warning">Processing</span>
+                    {% elif order.order_status == "PENDING" %}
+                        <span class="status-badge badge-warning">Pending</span>
+                    {% else %}
+                        <span class="status-badge badge-danger">Cancelled</span>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products -->
+    <div class="details-card">
+        <h5 class="mb-3">Products</h5>
+
+        {% for item in order.items.all %}
+        <div class="row align-items-center product-row">
+            <div class="col-md-2">
+                <img src="{{ item.product.image.url }}">
+            </div>
+
+            <div class="col-md-6">
+                <h6 class="mb-1">{{ item.product.name }}</h6>
+                <small class="text-muted">Quantity: {{ item.quantity }}</small>
+            </div>
+
+            <div class="col-md-4 text-md-end">
+                <strong>₹ {{ item.price }}</strong>
+            </div>
+        </div>
+        {% empty %}
+            <p>No products found for this order.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Shipping Info -->
+    <div class="details-card">
+        <h5 class="mb-3">Shipping Information</h5>
+
+        <p><strong>Carrier:</strong> {{ order.carrier}}</p>
+        <p><strong>Tracking ID:</strong> {{ order.tracking }}</p>
+        <p><strong>Shipping Date:</strong> {{ order.shipping_date }}</p>
+    </div>
+
+    <!-- Cancel Button -->
+    {% if order.order_status == "PENDING" or order.order_status == "PROCESSING" %}
+    <div class="text-end">
+        <form method="POST" action="{% url 'user_cancel_order' order.id %}">
+            {% csrf_token %}
+            <button type="submit"
+                    class="btn btn-cancel"
+                    onclick="return confirm('Are you sure you want to cancel this order?')">
+                <i class="fa-solid fa-xmark me-1"></i>
+                Cancel Order
+            </button>
+        </form>
+    </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,187 @@
+{% extends 'admin/base.html' %}
+{% block title %}Admin Orders{% endblock %}
+
+{% block content %}
+
+<style>
+    .dashboard-card {
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+    }
+
+    .filter-btn {
+        border-radius: 30px;
+        padding: 6px 18px;
+        font-size: 14px;
+        border: none;
+        background: #f1f1f1;
+        margin-right: 8px;
+        margin-bottom: 10px;
+    }
+
+    .filter-btn.active {
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        color: white;
+    }
+
+    .status-badge {
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .badge-pending { background: #ffeeba; color: #856404; }
+    .badge-processing { background: #cce5ff; color: #004085; }
+    .badge-completed { background: #d4edda; color: #155724; }
+    .badge-cancelled { background: #f8d7da; color: #721c24; }
+
+    .action-btn {
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 13px;
+        border: none;
+    }
+
+    .btn-view { background: #4e73df; color: white; }
+    .btn-cancel { background: #dc3545; color: white; }
+    .btn-complete { background: #28a745; color: white; }
+
+    table th {
+        background: #f8f9fc;
+    }
+</style>
+
+<div class="dashboard-card">
+
+    <h4 class="mb-4">
+        <i class="fa-solid fa-cart-shopping me-2"></i>
+        Admin Orders Dashboard
+    </h4>
+
+    <!-- Filter Buttons -->
+    <div class="mb-4">
+        <a href="?status=pending"><button class="filter-btn">Pending</button></a>
+        <a href="?status=processing"><button class="filter-btn">Processing</button></a>
+        <a href="?status=completed"><button class="filter-btn">Completed</button></a>
+        <a href="?status=cancelled"><button class="filter-btn">Cancelled</button></a>
+        <a href="?status=all"><button class="filter-btn">All Orders</button></a>
+    </div>
+
+    <h5 class="mb-3">{{ title }}</h5>
+
+    <div class="table-responsive">
+        <table class="table table-bordered align-middle">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Customer</th>
+                    <th>Product</th>
+                    <th>Qty</th>
+                    <th>Total</th>
+                    <th>Payment</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for order in orders %}
+                <tr>
+                    <td>#{{ order.id }}</td>
+                    <td>{{ order.customer.username }}</td>
+
+                    <td>
+                        {% for item in order.items.all %}
+                            {{ item.product.name }}<br>
+                        {% empty %}
+                            -
+                        {% endfor %}
+                    </td>
+
+                    <td>
+                        {% for item in order.items.all %}
+                            {{ item.quantity }}<br>
+                        {% empty %}
+                            -
+                        {% endfor %}
+                    </td>
+
+                    <td>₹{{ order.total_price }}</td>
+                    <td>{{ order.payment_status }}</td>
+
+                    <td>
+                        {% if order.order_status == 'PENDING' %}
+                            <span class="status-badge badge-pending">Pending</span>
+                        {% elif order.order_status == 'PROCESSING' %}
+                            <span class="status-badge badge-processing">Processing</span>
+                        {% elif order.order_status == 'COMPLETED' %}
+                            <span class="status-badge badge-completed">Completed</span>
+                        {% elif order.order_status == 'CANCELLED' %}
+                            <span class="status-badge badge-cancelled">Cancelled</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if order.order_status == 'PENDING' %}
+                            <a href="{% url 'detailsshow' order.id %}">
+                                <button class="action-btn btn-view">View</button>
+                            </a>
+
+                        {% elif order.order_status == 'PROCESSING' %}
+
+                            <form method="POST"
+                                  action="{% url 'cancel_processing' order.id %}"
+                                  style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit"
+                                        class="action-btn btn-cancel"
+                                        onclick="return confirm('Cancel this order?')">
+                                    Cancel
+                                </button>
+                            </form>
+
+                            <form method="POST"
+                                  action="{% url 'complete_order' order.id %}"
+                                  style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit"
+                                        class="action-btn btn-complete">
+                                    Complete
+                                </button>
+                            </form>
+
+                        {% else %}
+                            No Action
+                        {% endif %}
+                    </td>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="8" class="text-center">
+                        No Orders Found
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- Active Button Script -->
+<script>
+const urlParams = new URLSearchParams(window.location.search);
+const status = urlParams.get('status') || 'all';
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+    if (btn.parentElement.href.includes(status)) {
+        btn.classList.add('active');
+    }
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,222 @@
+{% extends 'user/base.html' %}
+{% block title %}Secure Payment | Shopora{% endblock %}
+
+{% block content %}
+
+<style>
+    .payment-wrapper {
+        padding: 60px 0;
+        min-height: 80vh;
+    }
+
+    .payment-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+        padding: 40px;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    .secure-badge {
+        font-size: 14px;
+        color: #28a745;
+        font-weight: 500;
+    }
+
+    .total-box {
+        background: #f8f9fc;
+        padding: 15px 20px;
+        border-radius: 12px;
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 25px;
+        text-align: center;
+    }
+
+    .input-box {
+        margin-bottom: 18px;
+    }
+
+    .input-box label {
+        font-weight: 500;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .input-box input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        transition: 0.3s;
+    }
+
+    .input-box input:focus {
+        border-color: #6f42c1;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(111,66,193,0.1);
+    }
+
+    .upi-option {
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 10px 15px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+    .upi-option:hover {
+        border-color: #6f42c1;
+        background: #f9f7ff;
+    }
+
+    .btn-complete {
+        width: 100%;
+        border-radius: 30px;
+        padding: 12px;
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        border: none;
+        color: white;
+        font-weight: 600;
+        font-size: 16px;
+        margin-top: 20px;
+    }
+
+    .btn-complete:hover {
+        opacity: 0.9;
+    }
+</style>
+
+<div class="container payment-wrapper">
+
+    <div class="payment-card">
+
+        <h4 class="fw-bold text-center mb-2">
+            <i class="fa-solid fa-shield-halved me-2"></i>
+            Secure Online Payment
+        </h4>
+
+        <p class="text-center text-muted">
+            Payment Method: <strong>{{ payment_method }}</strong>
+        </p>
+
+        <p class="secure-badge text-center">
+            🔒 100% Secure & Encrypted Payment
+        </p>
+
+        <div class="total-box">
+            Total Amount: ₹ {{ grand_total }}
+        </div>
+
+        <form method="POST" action="{% url 'complete_online_payment' %}">
+            {% csrf_token %}
+
+            {% for item in products %}
+                <input type="hidden" name="productid" value="{{ item.product.id }}">
+                <input type="hidden" name="quantity" value="{{ item.quantity }}">
+            {% endfor %}
+
+            <input type="hidden" name="payment_method" value="{{ payment_method }}">
+
+            {% if payment_method == "UPI" %}
+
+                <h6 class="fw-bold mb-3">Select UPI App</h6>
+
+                <label class="upi-option d-block">
+                    <input type="radio" name="upi_app" value="GooglePay" required>
+                    Google Pay
+                </label>
+
+                <label class="upi-option d-block">
+                    <input type="radio" name="upi_app" value="PhonePe">
+                    PhonePe
+                </label>
+
+                <label class="upi-option d-block">
+                    <input type="radio" name="upi_app" value="Paytm">
+                    Paytm
+                </label>
+
+                <div class="input-box mt-3">
+                    <label>Enter Registered Phone Number</label>
+                    <input type="text" name="upi_id" required minlength="10" maxlength="10" placeholder="Enter 10 digit number">
+                </div>
+
+            {% elif payment_method == "CARD" %}
+
+           <div class="input-box">
+    <label>Card Number</label>
+    <input 
+        type="text"
+        name="card_number"
+        required
+        placeholder="XXXX XXXX XXXX XXXX"
+        maxlength="16"
+        minlength="16"
+        pattern="[0-9]{16}"
+        inputmode="numeric"
+        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+    >
+</div>
+
+                <div class="row">
+                        <div class="col-md-6 input-box">
+        <label>Expiry (MM/YY)</label>
+        <input 
+            type="text"
+            name="expiry"
+            required
+            placeholder="MM/YY"
+            maxlength="5"
+            pattern="^(0[1-9]|1[0-2])\/\d{2}$"
+            inputmode="numeric"
+            oninput="formatExpiry(this)"
+        >
+    </div>
+
+                    <div class="col-md-6 input-box">
+    <label>CVV</label>
+    <input 
+        type="password"
+        name="cvv"
+        required
+        placeholder="***"
+        maxlength="4"
+        minlength="3"
+        pattern="^[0-9]{3,4}$"
+        inputmode="numeric"
+        autocomplete="off"
+        oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+    >
+</div>
+                </div>
+
+            {% endif %}
+
+            <button type="submit" class="btn btn-complete">
+                <i class="fa-solid fa-lock me-1"></i>
+                Complete Payment
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+function formatExpiry(input) {
+    // Remove non-digits
+    let value = input.value.replace(/\D/g, '');
+
+    // Add slash after 2 digits
+    if (value.length >= 3) {
+        value = value.substring(0,2) + '/' + value.substring(2,4);
+    }
+
+    input.value = value.substring(0,5);
+}
+</script>
+{% endblock %}

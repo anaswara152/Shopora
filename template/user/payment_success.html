@@ -1,0 +1,24 @@
+{% extends 'user/base.html' %}
+{% block title %}Payment Successful{% endblock %}
+
+{% block content %}
+
+<div class="card shadow-sm p-5 text-center" style="width: 450px;">
+
+    <h2 class="text-success mb-3">Payment Successful ✅</h2>
+
+    <p class="mb-2">Your payment has been completed.</p>
+    <p class="fw-semibold">Your Order is Confirmed!</p>
+
+    <hr>
+
+    <p><strong>Order ID:</strong> #{{ order.id }}</p>
+    <p><strong>Total Amount:</strong> ₹{{ order.total_price }}</p>
+
+    <a href="{% url 'my_orders' %}" class="btn btn-primary mt-3">
+        View My Orders
+    </a>
+
+</div>
+
+{% endblock %}

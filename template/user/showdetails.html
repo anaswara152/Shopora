@@ -1,0 +1,224 @@
+{% extends 'user/base.html' %}
+{% block title %}Product Details | Shopora{% endblock %}
+
+{% block content %}
+
+<style>
+    .product-wrapper {
+        padding: 60px 0;
+        min-height: 80vh;
+    }
+
+    .product-card {
+        background: #fff;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+        padding: 40px;
+    }
+
+    .product-img {
+        width: 100%;
+        max-height: 450px;
+        object-fit: cover;
+        border-radius: 15px;
+    }
+
+    .price {
+        color: #6f42c1;
+        font-size: 24px;
+        font-weight: 700;
+    }
+
+    .stock {
+        font-weight: 600;
+        color: green;
+    }
+
+    .out-stock {
+        color: red;
+        font-weight: 600;
+    }
+
+    .qty-box {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 20px 0;
+    }
+
+    .qty-box button {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        border: 1px solid #ccc;
+        background: #f8f9fa;
+        font-size: 18px;
+    }
+
+    .qty-box input {
+        width: 60px;
+        text-align: center;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+        height: 35px;
+    }
+
+    .btn-cart {
+        border-radius: 30px;
+        padding: 10px 25px;
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        border: none;
+        color: white;
+        font-weight: 500;
+        margin-right: 10px;
+    }
+
+    .btn-order {
+        border-radius: 30px;
+        padding: 10px 25px;
+        background: #28a745;
+        border: none;
+        color: white;
+        font-weight: 500;
+    }
+
+    .btn-disabled {
+        border-radius: 30px;
+        padding: 10px 25px;
+        background: gray;
+        color: white;
+        border: none;
+    }
+
+    .total-price {
+        font-weight: 600;
+        font-size: 18px;
+    }
+</style>
+
+<script>
+    function increase(maxStock) {
+        let qty = document.getElementById("qty");
+        if (parseInt(qty.value) < maxStock) {
+            qty.value = parseInt(qty.value) + 1;
+            updateTotal();
+        }
+    }
+
+    function decrease() {
+        let qty = document.getElementById("qty");
+        if (parseInt(qty.value) > 1) {
+            qty.value = parseInt(qty.value) - 1;
+            updateTotal();
+        }
+    }
+
+    function updateTotal() {
+        let price = parseFloat(document.getElementById("price").value);
+        let qty = parseInt(document.getElementById("qty").value);
+        document.getElementById("total").innerText =
+            "Total: ₹ " + (price * qty);
+    }
+</script>
+
+<div class="container product-wrapper">
+
+{% for i in m %}
+
+<div class="product-card">
+    <div class="row">
+
+        <!-- Image Section -->
+        <div class="col-md-6 text-center">
+            {% if i.image %}
+                <img src="{{ i.image.url }}" class="product-img">
+            {% else %}
+                <p>No Image Available</p>
+            {% endif %}
+        </div>
+
+        <!-- Details Section -->
+        <div class="col-md-6">
+
+            <h3 class="fw-bold mb-3">{{ i.name }}</h3>
+
+            <p><strong>Fabric:</strong> {{ i.fabric }}</p>
+            <p><strong>Size:</strong> {{ i.size }}</p>
+            <p>{{ i.description }}</p>
+
+            <div class="price mb-2">
+                ₹ {{ i.base_price }}
+            </div>
+
+            {% if i.stock_quantity == 0 %}
+                <div class="out-stock mb-3">
+                    Out of Stock
+                </div>
+            {% else %}
+                <div class="stock mb-3">
+                    In Stock ({{ i.stock_quantity }} available)
+                </div>
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+                <input type="hidden" name="productid" value="{{ i.id }}">
+                <input type="hidden" id="price" value="{{ i.base_price }}">
+
+                {% if i.stock_quantity > 0 %}
+
+                <!-- Quantity -->
+                <div class="qty-box">
+                    <button type="button" onclick="decrease()">-</button>
+
+                    <input type="number"
+                           id="qty"
+                           name="count"
+                           value="1"
+                           min="1"
+                           max="{{ i.stock_quantity }}"
+                           onchange="updateTotal()">
+
+                    <button type="button"
+                            onclick="increase({{ i.stock_quantity }})">
+                        +
+                    </button>
+                </div>
+
+                <div id="total" class="total-price mb-3">
+                    Total: ₹ {{ i.base_price }}
+                </div>
+
+                <!-- Buttons -->
+                <button type="submit"
+                        formaction="{% url 'addcart' %}"
+                        class="btn btn-cart">
+                    🛒 Add to Cart
+                </button>
+
+                <button type="submit"
+                        formaction="{% url 'payment_page' %}"
+                        class="btn btn-order">
+                    ⚡ Order Now
+                </button>
+
+                {% else %}
+
+                <button type="button"
+                        class="btn btn-disabled"
+                        disabled>
+                    Out of Stock
+                </button>
+
+                {% endif %}
+            </form>
+
+        </div>
+    </div>
+</div>
+
+{% endfor %}
+
+</div>
+
+{% endblock %}

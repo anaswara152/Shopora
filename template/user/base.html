@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Shopora{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #f5f7fb;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(90deg, #4e73df, #6f42c1);
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-weight: 600;
+            font-size: 22px;
+            color: #fff !important;
+        }
+
+        .nav-link {
+            color: #ffffff !important;
+            font-weight: 500;
+            margin-right: 15px;
+            transition: 0.3s;
+        }
+
+        .nav-link:hover {
+            opacity: 0.8;
+        }
+
+        .btn-custom {
+            border-radius: 30px;
+            padding: 6px 20px;
+            font-weight: 500;
+        }
+
+        .btn-login {
+            background: white;
+            color: #4e73df;
+            border: none;
+        }
+
+        .btn-login:hover {
+            background: #f1f1f1;
+        }
+
+        .btn-register {
+            background: #ffb703;
+            border: none;
+            color: #000;
+        }
+
+        .btn-register:hover {
+            background: #ffa200;
+        }
+
+        /* Content */
+        .main-content {
+            min-height: 80vh;
+            padding: 50px 0;
+        }
+
+        /* Footer */
+        footer {
+            background: #ffffff;
+            border-top: 1px solid #eaeaea;
+            padding: 20px 0;
+            text-align: center;
+            color: #555;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- 🔷 Navbar -->
+<!-- 🔷 Navbar -->
+<nav class="navbar navbar-expand-lg shadow-sm">
+    <div class="container">
+
+        <!-- Logo -->
+        <a class="navbar-brand" href="{% url 'userhome' %}">
+            Shopora
+        </a>
+
+        <!-- Mobile Toggle Button -->
+        <button class="navbar-toggler text-white border-0"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarContent">
+            <i class="fa fa-bars text-white"></i>
+        </button>
+
+        <!-- Collapsible Menu -->
+        <div class="collapse navbar-collapse justify-content-end"
+             id="navbarContent">
+
+            <ul class="navbar-nav align-items-center">
+                 <li class="nav-item">
+                    <a class="nav-link" href="{% url 'userhome' %}">
+                        <i class="fa-solid fa-house me-1"></i> Home
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'viewcart' %}">
+                        <i class="fa fa-shopping-cart"></i> Cart
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'viewwish' %}">
+                        <i class="fa fa-heart"></i> Wishlist
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'my_orders' %}">
+                        Orders
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'view_profile' %}">
+                        Profile
+                    </a>
+                </li>
+
+                <li class="nav-item ms-3">
+                    <a href="{% url 'logoutuser' %}"
+                       class="btn btn-sm btn-login btn-custom">
+                        Logout
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+
+<!-- 🔷 Page Content -->
+<div class="container main-content">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- 🔷 Footer -->
+<footer>
+    © 2026 Shopora | Designed with ❤
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

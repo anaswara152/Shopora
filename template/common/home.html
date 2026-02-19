@@ -1,0 +1,92 @@
+{% extends 'common/base1.html' %}
+{% block title %}Shopora | Home{% endblock %}
+
+{% block content %}
+
+<style>
+    .hero-section {
+        position: relative;
+        height: 90vh;
+        background: url('https://images.unsplash.com/photo-1607083206968-13611e3d76db?q=80&w=1600')
+                    no-repeat center center/cover;
+        border-radius: 15px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Soft gradient overlay */
+    .hero-overlay {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            rgba(78, 115, 223, 0.85),
+            rgba(111, 66, 193, 0.75)
+        );
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+        color: white;
+        max-width: 600px;
+        padding-left: 60px;
+    }
+
+    .hero-content h1 {
+        font-weight: 700;
+        font-size: 50px;
+    }
+
+    .hero-content p {
+        font-size: 18px;
+        margin-top: 15px;
+        opacity: 0.9;
+    }
+
+    .btn-hero {
+        margin-top: 25px;
+        padding: 10px 35px;
+        border-radius: 30px;
+        font-weight: 600;
+        background: #ffb703;
+        border: none;
+        transition: 0.3s ease;
+    }
+
+    .btn-hero:hover {
+        background: #ffa200;
+        transform: translateY(-3px);
+    }
+
+    @media (max-width: 768px) {
+        .hero-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 32px;
+        }
+    }
+</style>
+
+<section class="hero-section">
+    <div class="hero-overlay"></div>
+
+    <div class="container hero-content">
+        <h1>Discover The Latest Trends</h1>
+        <p>Shop premium fashion, electronics & accessories in one place</p>
+
+        <a href="{% url 'login_user' %}" class="btn btn-hero">
+            Shop Now
+        </a>
+    </div>
+</section>
+
+
+
+
+{% endblock %}

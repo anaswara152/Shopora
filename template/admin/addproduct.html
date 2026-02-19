@@ -1,0 +1,137 @@
+{% extends 'admin/base.html' %}
+{% block title %}Add Product | Admin{% endblock %}
+
+{% block content %}
+
+<style>
+    .form-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+    }
+
+    .form-title {
+        font-weight: 600;
+        margin-bottom: 25px;
+    }
+
+    .form-control,
+    .form-select,
+    textarea {
+        border-radius: 12px;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+    }
+
+    .form-control:focus,
+    .form-select:focus,
+    textarea:focus {
+        border-color: #6f42c1;
+        box-shadow: none;
+    }
+
+    .btn-submit {
+        border-radius: 30px;
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        border: none;
+        padding: 10px;
+        font-weight: 600;
+    }
+
+    .btn-submit:hover {
+        opacity: 0.9;
+    }
+</style>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+
+        <div class="form-card">
+
+            <h4 class="form-title">
+                <i class="fa-solid fa-plus me-2"></i>
+                Add New Product
+            </h4>
+
+            <!-- Django Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success rounded-pill text-center">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label class="form-label">Product Name</label>
+                    <input type="text" name="name" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Size</label>
+                    <select name="size" class="form-select">
+                        <option value="">-- Select Size --</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="2-3Y, 3-4Y-5Y">2-3Y, 3-4Y-5Y</option>
+                        <option value="3-4Y, 4-5Y, 5-6Y">3-4Y, 4-5Y, 5-6Y</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Fabric</label>
+                    <input type="text" name="fabric" class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea name="description" rows="3" class="form-control" required></textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Base Price</label>
+                        <input type="number" name="base_price" step="0.01" class="form-control" required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Stock Quantity</label>
+                        <input type="number" name="stock_quantity" class="form-control" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Select Category</label>
+                    <select name="categoryid" class="form-select" required>
+                        <option value="">-- Select Category --</option>
+                        {% for c in ca %}
+                            <option value="{{ c.id }}">{{ c.cname }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Product Image</label>
+                    <input type="file" name="image" class="form-control">
+                </div>
+
+                <button type="submit"
+                        class="btn btn-submit text-white w-100">
+                    Add Product
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

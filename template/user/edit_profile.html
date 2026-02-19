@@ -1,0 +1,162 @@
+{% extends 'user/base.html' %}
+{% block title %}Edit Profile | Shopora{% endblock %}
+
+{% block content %}
+
+<style>
+    .edit-wrapper {
+        padding: 60px 0;
+        min-height: 80vh;
+    }
+
+    .edit-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+        overflow: hidden;
+    }
+
+    .edit-header {
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        padding: 25px;
+        text-align: center;
+        color: white;
+    }
+
+    .edit-header h4 {
+        margin: 0;
+        font-weight: 600;
+    }
+
+    .edit-body {
+        padding: 35px;
+    }
+
+    .form-control {
+        border-radius: 12px;
+        padding: 10px 15px;
+    }
+
+    .btn-update {
+        border-radius: 30px;
+        padding: 8px 30px;
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        border: none;
+        color: white;
+        font-weight: 500;
+    }
+
+    .btn-update:hover {
+        opacity: 0.9;
+    }
+
+    .btn-cancel {
+        border-radius: 30px;
+        padding: 8px 25px;
+        background: #f8f9fa;
+        border: 1px solid #ddd;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .btn-cancel:hover {
+        background: #e9ecef;
+    }
+</style>
+
+<div class="container edit-wrapper">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <div class="edit-card">
+
+                <!-- Header -->
+                <div class="edit-header">
+                    <h4>
+                        <i class="fa-solid fa-pen-to-square me-2"></i>
+                        Edit Profile
+                    </h4>
+                </div>
+
+                <!-- Body -->
+                <div class="edit-body">
+
+                    <form method="POST">
+                        {% csrf_token %}
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">First Name</label>
+                                <input type="text" name="first_name"
+                                       class="form-control"
+                                       value="{{ request.user.first_name }}">
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" name="last_name"
+                                       class="form-control"
+                                       value="{{ request.user.last_name }}">
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email</label>
+                            <input type="email" name="email"
+                                   class="form-control"
+                                   value="{{ request.user.email }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <textarea name="address"
+                                      class="form-control"
+                                      rows="3">{{ profile.address }}</textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">City</label>
+                                <input type="text" name="city"
+                                       class="form-control"
+                                       value="{{ profile.city }}">
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">State</label>
+                                <input type="text" name="state"
+                                       class="form-control"
+                                       value="{{ profile.state }}">
+                            </div>
+
+                            <div class="col-md-4 mb-3">
+                                <label class="form-label">Postal Code</label>
+                                <input type="text" name="postalcode"
+                                       class="form-control"
+                                       value="{{ profile.postalcode }}">
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-update me-2">
+                                <i class="fa-solid fa-check me-1"></i>
+                                Update Profile
+                            </button>
+
+                            <a href="{% url 'view_profile' %}" class="btn btn-cancel">
+                                <i class="fa-solid fa-arrow-left me-1"></i>
+                                Cancel
+                            </a>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Product</title>
+</head>
+<body>
+
+<h2>Edit Product</h2>
+
+{% if messages %}
+    {% for message in messages %}
+        <p style="color:green;">{{ message }}</p>
+    {% endfor %}
+{% endif %}
+
+{% for i in s %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <label>Name:</label><br>
+    <input type="text" name="name" value="{{ i.name }}" required>
+    <br><br>
+
+    <label>Size:</label><br>
+    <input type="text" name="size" value="{{ i.size }}" required>
+    <br><br>
+
+    <label>Fabric:</label><br>
+    <input type="text" name="fabric" value="{{ i.fabric }}" required>
+    <br><br>
+
+    <label>Description:</label><br>
+    <textarea name="description" required>{{ i.description }}</textarea>
+    <br><br>
+
+    <label>Base Price:</label><br>
+    <input type="number" name="base_price" step="0.01" value="{{ i.base_price }}" required>
+    <br><br>
+
+    <label>Stock Quantity:</label><br>
+    <input type="number" name="stock_quantity" value="{{ i.stock_quantity }}" required>
+    <br><br>
+
+    <label>Category:</label><br>
+    <select name="categoryid" required>
+        {% for c in ca %}
+            <option value="{{ c.id }}" 
+                {% if c.id == i.categoryid.id %} selected {% endif %}>
+                {{ c.name }}
+            </option>
+        {% endfor %}
+    </select>
+    <br><br>
+
+    <label>Current Image:</label><br>
+    {% if i.image %}
+        <img src="{{ i.image.url }}" width="100"><br>
+    {% endif %}
+    <br>
+
+    <label>Change Image:</label><br>
+    <input type="file" name="image">
+    <br><br>
+
+    <button type="submit">Update Product</button>
+
+</form>
+{% endfor %}
+
+</body>
+</html>
