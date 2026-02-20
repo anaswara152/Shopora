@@ -1,71 +1,174 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Product</title>
-</head>
-<body>
+{% extends 'admin/base.html' %}
+{% block title %}Edit Product{% endblock %}
 
-<h2>Edit Product</h2>
+{% block content %}
 
-{% if messages %}
-    {% for message in messages %}
-        <p style="color:green;">{{ message }}</p>
-    {% endfor %}
-{% endif %}
+<style>
+    .form-card {
+        background: #ffffff;
+        padding: 35px;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+    }
 
-{% for i in s %}
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
+    .form-title {
+        font-weight: 600;
+        margin-bottom: 25px;
+    }
 
-    <label>Name:</label><br>
-    <input type="text" name="name" value="{{ i.name }}" required>
-    <br><br>
+    .form-control,
+    .form-select,
+    textarea {
+        border-radius: 12px;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+    }
 
-    <label>Size:</label><br>
-    <input type="text" name="size" value="{{ i.size }}" required>
-    <br><br>
+    .form-control:focus,
+    .form-select:focus,
+    textarea:focus {
+        border-color: #6f42c1;
+        box-shadow: none;
+    }
 
-    <label>Fabric:</label><br>
-    <input type="text" name="fabric" value="{{ i.fabric }}" required>
-    <br><br>
+    .btn-update {
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        border: none;
+        border-radius: 30px;
+        padding: 10px;
+        font-weight: 600;
+        color: white;
+    }
 
-    <label>Description:</label><br>
-    <textarea name="description" required>{{ i.description }}</textarea>
-    <br><br>
+    .btn-update:hover {
+        opacity: 0.9;
+    }
 
-    <label>Base Price:</label><br>
-    <input type="number" name="base_price" step="0.01" value="{{ i.base_price }}" required>
-    <br><br>
+    .current-img {
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 15px;
+        border: 1px solid #eee;
+        margin-bottom: 10px;
+    }
+</style>
 
-    <label>Stock Quantity:</label><br>
-    <input type="number" name="stock_quantity" value="{{ i.stock_quantity }}" required>
-    <br><br>
+<div class="row justify-content-center">
+    <div class="col-md-8">
 
-    <label>Category:</label><br>
-    <select name="categoryid" required>
-        {% for c in ca %}
-            <option value="{{ c.id }}" 
-                {% if c.id == i.categoryid.id %} selected {% endif %}>
-                {{ c.name }}
-            </option>
-        {% endfor %}
-    </select>
-    <br><br>
+        <div class="form-card">
 
-    <label>Current Image:</label><br>
-    {% if i.image %}
-        <img src="{{ i.image.url }}" width="100"><br>
-    {% endif %}
-    <br>
+            <h4 class="form-title">
+                <i class="fa-solid fa-pen-to-square me-2"></i>
+                Edit Product
+            </h4>
 
-    <label>Change Image:</label><br>
-    <input type="file" name="image">
-    <br><br>
+            <!-- Django Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success rounded-pill text-center">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
 
-    <button type="submit">Update Product</button>
+            {% for i in s %}
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
 
-</form>
-{% endfor %}
+                <div class="mb-3">
+                    <label class="form-label">Product Name</label>
+                    <input type="text" name="name"
+                           value="{{ i.name }}"
+                           class="form-control" required>
+                </div>
 
-</body>
-</html>
+                <div class="mb-3">
+                    <label class="form-label">Size</label>
+                    <input type="text" name="size"
+                           value="{{ i.size }}"
+                           class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Fabric</label>
+                    <input type="text" name="fabric"
+                           value="{{ i.fabric }}"
+                           class="form-control" required>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <textarea name="description"
+                              rows="3"
+                              class="form-control"
+                              required>{{ i.description }}</textarea>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Base Price</label>
+                        <input type="number"
+                               name="base_price"
+                               step="0.01"
+                               value="{{ i.base_price }}"
+                               class="form-control"
+                               required>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Stock Quantity</label>
+                        <input type="number"
+                               name="stock_quantity"
+                               value="{{ i.stock_quantity }}"
+                               class="form-control"
+                               required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Category</label>
+                    <select name="categoryid"
+                            class="form-select"
+                            required>
+                        {% for c in ca %}
+                            <option value="{{ c.id }}"
+                                {% if c.id == i.categoryid.id %} selected {% endif %}>
+                                {{ c.cname }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Current Image</label><br>
+                    {% if i.image %}
+                        <img src="{{ i.image.url }}"
+                             class="current-img">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label">Change Image</label>
+                    <input type="file"
+                           name="image"
+                           class="form-control">
+                </div>
+
+                <button type="submit"
+                        class="btn btn-update w-100">
+                    Update Product
+                </button>
+
+            </form>
+            {% endfor %}
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}
