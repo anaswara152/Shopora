@@ -90,7 +90,7 @@ def userhome(request):
     
 def login_user(request):
     if request.user.is_authenticated:
-        if request.user.groups.filter(name="CUSTOMER").exists():
+        if request.user.is_staff:
             return redirect('userhome')
         else:
             return redirect('adminhome')
@@ -103,7 +103,7 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
-            if user.groups.filter(name="CUSTOMER").exists():
+            if user.is_staff:
                 return redirect('userhome')
             else:
                 return redirect('adminhome')
@@ -455,7 +455,6 @@ def user_cancel_order(request, order_id):
             order.order_status = 'CANCELLED'
             order.save()
 
-            # 🔥 Restore stock for ALL products in this order
             for item in order.items.all():
                 product = item.product
                 product.stock_quantity += item.quantity

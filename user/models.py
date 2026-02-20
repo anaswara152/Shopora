@@ -5,9 +5,9 @@ from siteadmin.models import Product
 class reg(models.Model):
     user=models.OneToOneField(User,on_delete=models.CASCADE)
     address=models.TextField()
-    city=models.CharField(max_length=18)
-    postalcode=models.CharField(max_length=4)
-    state=models.CharField(max_length=18)
+    city=models.CharField(max_length=100)
+    postalcode=models.CharField(max_length=100)
+    state=models.CharField(max_length=100)
     phone=models.CharField(max_length=100,null=True,blank=True)
     
     
