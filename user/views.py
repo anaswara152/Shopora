@@ -90,7 +90,7 @@ def userhome(request):
     
 def login_user(request):
     if request.user.is_authenticated:
-        if request.user.is_staff:
+        if request.user.groups.filter(name="CUSTOMER").exists():
             return redirect('userhome')
         else:
             return redirect('adminhome')
@@ -103,7 +103,7 @@ def login_user(request):
 
         if user is not None:
             login(request, user)
-            if user.is_staff:
+            if user.groups.filter(name="CUSTOMER").exists():
                 return redirect('userhome')
             else:
                 return redirect('adminhome')
