@@ -356,9 +356,8 @@ def process_payment(request):
             'payment_method': payment_method,
             'grand_total': grand_total
         })
-
+ 
     return redirect('viewcart')
-
 
 
 

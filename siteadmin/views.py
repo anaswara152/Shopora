@@ -85,7 +85,7 @@ def detailsshow(request, id):
             order.order_status = 'CANCELLED'
             order.payment_status = 'FAILED'
             order.save()
-            return redirect('adminview')
+            return redirect('admin_orders')
 
     return render(request, 'admin/showdetails.html', {'order': order})
 
@@ -110,7 +110,7 @@ def cancel_processing(request, id):
 
 
 def admin_orders(request):
-    status = request.GET.get('status')  # Read filter from URL
+    status = request.GET.get('status') 
 
     if status == "pending":
         orders = Order.objects.filter(order_status='PENDING')
