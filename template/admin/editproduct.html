@@ -86,16 +86,25 @@
 
                 <div class="mb-3">
                     <label class="form-label">Size</label>
-                    <input type="text" name="size"
-                           value="{{ i.size }}"
-                           class="form-control" required>
+                    <select name="size" id="size" class="form-select">
+                        <option value="{{i.size}}">{{i.size}}</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="2-3Y, 3-4Y-5Y">2-3Y, 3-4Y-5Y</option>
+                        <option value="3-4Y, 4-5Y, 5-6Y">3-4Y, 4-5Y, 5-6Y</option>
+
+                    </select>
+
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Fabric</label>
                     <input type="text" name="fabric"
                            value="{{ i.fabric }}"
-                           class="form-control" required>
+                           class="form-control" readonly>
                 </div>
 
                 <div class="mb-3">
@@ -114,7 +123,7 @@
                                step="0.01"
                                value="{{ i.base_price }}"
                                class="form-control"
-                               required>
+                               readonly>
                     </div>
 
                     <div class="col-md-6 mb-3">

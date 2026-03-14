@@ -16,10 +16,14 @@ def productadd(request):
          base_price=request.POST['base_price']
          stock_quantity=request.POST['stock_quantity']
          categoryid=request.POST['categoryid']
-         if len(request.FILES)>0:
-              imge=request.FILES['image']
+         if 'image' in request.FILES:
+            imge = request.FILES['image']
+
+            if not imge.name.lower().endswith('.jpg'):
+                return redirect('productadd')
+
          else:
-              imge='no image'    
+            imge = None
          n=Product.objects.create(name=name,size=size,description=description,base_price=base_price,stock_quantity=stock_quantity,categoryid_id=categoryid,fabric=fabric,image=imge)
          n.save()
          messages.info(request,'product added')
