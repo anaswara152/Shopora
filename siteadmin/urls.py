@@ -12,5 +12,9 @@ urlpatterns=[
     path('processing_orders',views.processing_orders,name='processing_orders'),
     path('complete_order/<int:id>',views.complete_order,name='complete_order'),
     path('cancel_processing/<int:id>',views.cancel_processing,name='cancel_processing'),
-    path('admin_orders',views.admin_orders,name='admin_orders')
+    path('admin_orders',views.admin_orders,name='admin_orders'),
+    path('add_category',views.add_category,name='add_category'),
+    path('view_category',views.view_category,name='view_category'),
+    path('edit_category/<int:id>',views.edit_category,name='edit_category'),
+    path('delete_category/<int:id>',views.delete_category,name='delete_category')
 ]

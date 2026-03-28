@@ -1,0 +1,82 @@
+{% extends 'admin/base.html' %}
+{% block title %}Add Category | Admin{% endblock %}
+
+{% block content %}
+
+<style>
+    .form-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.06);
+    }
+
+    .form-title {
+        font-weight: 600;
+        margin-bottom: 25px;
+    }
+
+    .form-control {
+        border-radius: 12px;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+    }
+
+    .form-control:focus {
+        border-color: #6f42c1;
+        box-shadow: none;
+    }
+
+    .btn-submit {
+        border-radius: 30px;
+        background: linear-gradient(90deg, #4e73df, #6f42c1);
+        border: none;
+        padding: 10px;
+        font-weight: 600;
+    }
+
+    .btn-submit:hover {
+        opacity: 0.9;
+    }
+</style>
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+
+        <div class="form-card">
+
+            <h4 class="form-title">
+                <i class="fa-solid fa-folder-plus me-2"></i>
+                Add New Category
+            </h4>
+
+            <!-- Django Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-success rounded-pill text-center">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="mb-4">
+                    <label class="form-label">Category Name</label>
+                    <input type="text" name="cname" class="form-control" placeholder="Enter category name" required>
+                </div>
+
+                <button type="submit"
+                        class="btn btn-submit text-white w-100">
+                    Add Category
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

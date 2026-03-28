@@ -6,6 +6,41 @@ from user.models import*
 def adminhome(request):
     return render(request,'admin/adminhome.html')
 
+def add_category(request):
+    if request.method == 'POST':
+        cname = request.POST.get('cname')
+
+        if cname:
+            category.objects.create(cname=cname)
+
+        return redirect('add_category')
+
+    return render(request, 'admin/add_category.html')
+
+def view_category(request):
+    data = category.objects.all()
+    return render(request, 'admin/view_category.html', {'data': data})
+        
+
+def edit_category(request, id):
+    cat = get_object_or_404(category, id=id)
+
+    if request.method == 'POST':
+        cname = request.POST.get('cname')
+
+        if cname:
+            cat.cname = cname
+            cat.save()
+            messages.success(request, "Category updated successfully!")
+            return redirect('view_category')
+
+    return render(request, 'admin/edit_category.html', {'cat': cat})        
+
+def delete_category(request, id):
+    cat = get_object_or_404(category, id=id)
+    cat.delete()
+    messages.success(request, "Category deleted successfully!")
+    return redirect('view_category')
 
 def productadd(request):
      if request.method =='POST':

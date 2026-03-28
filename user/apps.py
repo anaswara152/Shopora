@@ -12,5 +12,5 @@ class UserConfig(AppConfig):
                 User.objects.create_superuser(
                     username='admin',
                     email='admin@gmail.com',
-                    password='admin123'
+                    password='admin'
                 )

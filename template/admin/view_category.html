@@ -1,0 +1,75 @@
+{% extends 'admin/base.html' %}
+{% block title %}View Category{% endblock %}
+
+{% block content %}
+
+<style>
+    .card-box {
+        background: #fff;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.05);
+    }
+
+    .table th {
+        font-weight: 600;
+    }
+
+    .btn-sm {
+        border-radius: 20px;
+        padding: 5px 12px;
+    }
+</style>
+
+<div class="container">
+    <div class="card-box">
+
+        <h4 class="mb-4">
+            <i class="fa-solid fa-list me-2"></i>
+            Category List
+        </h4>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-success text-center rounded-pill">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <table class="table table-bordered text-center">
+            <thead class="table-light">
+                <tr>
+                    <th>Category Name</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for c in data %}
+                <tr>
+                    <td>{{ c.cname }}</td>
+                    <td>
+                        <a href="{% url 'edit_category' c.id %}" class="btn btn-warning btn-sm text-white">
+                            Edit
+                        </a>
+
+                        <a href="{% url 'delete_category' c.id %}"
+                           class="btn btn-danger btn-sm"
+                           onclick="return confirm('Are you sure?')">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3">No categories found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+{% endblock %}
