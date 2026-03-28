@@ -23,3 +23,6 @@ class Product(models.Model):
     image = models.ImageField(upload_to='products', validators=[validate_jpg],null=True, blank=True)
     def __str__(self):
         return self.name
+    
+    
+    
