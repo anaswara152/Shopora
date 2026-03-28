@@ -13,9 +13,9 @@ def validate_jpg(value):
         raise ValidationError('Only JPG images are allowed.')
     
 class Product(models.Model):
-    name = models.CharField(max_length=20)
-    size = models.CharField(max_length=20,null=True,blank=True)
-    fabric = models.CharField(max_length=20)
+    name = models.CharField(max_length=100)
+    size = models.CharField(max_length=100,null=True,blank=True)
+    fabric = models.CharField(max_length=100)
     description = models.TextField()
     base_price = models.FloatField()   
     stock_quantity = models.PositiveIntegerField() 
