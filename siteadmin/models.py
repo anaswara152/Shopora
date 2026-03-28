@@ -20,6 +20,6 @@ class Product(models.Model):
     base_price = models.FloatField()   
     stock_quantity = models.PositiveIntegerField() 
     categoryid = models.ForeignKey(category, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='products', validators=[validate_jpg])
+    image = models.ImageField(upload_to='products', validators=[validate_jpg],null=True, blank=True)
     def __str__(self):
         return self.name
