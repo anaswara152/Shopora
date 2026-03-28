@@ -96,28 +96,10 @@ def login_user(request):
             return redirect('adminhome')
 
     if request.method == 'POST':
-       from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User
-from django.contrib import messages
-
-def login_user(request):
-    if request.user.is_authenticated:
-        if request.user.groups.filter(name="CUSTOMER").exists():
-            return redirect('userhome')
-        else:
-            return redirect('adminhome')
-
-    if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
 
-        # 🔥 allow login using email OR username
-        user_obj = User.objects.filter(email=username).first()
-
-        if user_obj:
-            user = authenticate(request, username=user_obj.username, password=password)
-        else:
-            user = authenticate(request, username=username, password=password)
+        user = authenticate(request, username=username, password=password)
 
         if user is not None:
             login(request, user)
@@ -126,7 +108,7 @@ def login_user(request):
             else:
                 return redirect('adminhome')
         else:
-            messages.error(request, 'Invalid username/email or password')
+            messages.error(request, 'User credentials are not correct')
 
     return render(request, 'common/login.html')
 
