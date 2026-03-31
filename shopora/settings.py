@@ -128,6 +128,9 @@ STORAGES = {
     "default": {
         "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
 }
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dcwpcjjjp',
