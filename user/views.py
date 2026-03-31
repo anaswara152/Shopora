@@ -27,10 +27,10 @@ def registration(request):
         password=request.POST['password']
 
         if User.objects.filter(email=email).exists():
-            messages.info(request,'username existing')
+            messages.info(request,'This email is already registered. Please use a different email.')
             return render(request,'user/register.html')
         elif User.objects.filter(username=username).exists():
-             messages.info(request,'email existing')
+             messages.info(request,'This username is already taken. Please choose a different one.')
              return render(request,'user/register.html')
         else:
             user=User.objects.create_user(username=username, first_name= first_name,last_name=last_name,email=email,password=password)
