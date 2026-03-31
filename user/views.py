@@ -111,10 +111,10 @@ def login_user(request):
             messages.error(request, 'User credentials are not correct')
 
     return render(request, 'common/login.html')
-
-def logoutuser(request):
-     if request.user.is_authenticated:
-           request.session.flush()
+                                            #from django.contrib.auth import logout
+def logoutuser(request):                    #def logoutuser(request):
+     if request.user.is_authenticated:       #      logout(request)
+           request.session.flush()           #return redirect('home')
      return redirect('home')
 
 def deatiles(request,id):
