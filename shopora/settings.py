@@ -124,7 +124,11 @@ STATIC_URL = '/static/'#Location of static files
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+}
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': 'dcwpcjjjp',
     'API_KEY': '641643861217256',
