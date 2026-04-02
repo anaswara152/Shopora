@@ -50,12 +50,21 @@ from django.db.models import Q
 def userhome(request):
     categories = category.objects.all()
     
-    # Create a dictionary: category -> products in that category
-    category_products = {}
-    for cat in categories:
-        products_in_cat = Product.objects.filter(categoryid=cat)
-        if products_in_cat.exists():  # Optional: only show if category has products
-            category_products[cat] = products_in_cat
+    # Start with all products
+    products = Product.objects.all()
+    
+    # Get filter values from GET request
+    search = request.GET.get('search')
+    selected_category = request.GET.get('category')
+    size = request.GET.get('size')
+
+    # Apply filters if provided
+    if search:
+        products = products.filter(name__icontains=search)
+    if selected_category:
+        products = products.filter(categoryid_id=selected_category)
+    if size:
+        products = products.filter(size__icontains=size)
 
     # Wishlist for logged-in user
     if request.user.is_authenticated:
@@ -65,10 +74,24 @@ def userhome(request):
     else:
         user_wishlist_ids = []
 
-    return render(request, 'user/userhome.html', {
+    # Now group products by category for display
+    category_products = {}
+    for cat in categories:
+        cat_products = products.filter(categoryid=cat)
+        if cat_products.exists():
+            category_products[cat] = cat_products
+
+    context = {
+        'categories': categories,
         'category_products': category_products,
-        'user_wishlist_ids': user_wishlist_ids
-    })    
+        'user_wishlist_ids': user_wishlist_ids,
+        'selected_category': selected_category,
+        'search': search,
+        'size': size
+    }
+
+    return render(request, 'user/userhome.html', context)
+      
 def login_user(request):
     if request.user.is_authenticated:
         if request.user.groups.filter(name="CUSTOMER").exists():
