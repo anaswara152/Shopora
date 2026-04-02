@@ -2,6 +2,7 @@
 {% block title %}Add Product | Admin{% endblock %}
 
 {% block content %}
+
 <style>
     .form-card {
         background: #ffffff;
@@ -71,15 +72,23 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Size / Variant</label>
-<select name="size" id="size" class="form-select">
-    <option value="">-- Select Size / Variant --</option>
-</select>                </div>
+                    <label class="form-label">Size</label>
+                    <select name="size" class="form-select">
+                        <option value="">-- Select Size --</option>
+                        <option value="XS">XS</option>
+                        <option value="S">S</option>
+                        <option value="M">M</option>
+                        <option value="L">L</option>
+                        <option value="XL">XL</option>
+                        <option value="2-3Y, 3-4Y-5Y">2-3Y, 3-4Y-5Y</option>
+                        <option value="3-4Y, 4-5Y, 5-6Y">3-4Y, 4-5Y, 5-6Y</option>
+                    </select>
+                </div>
 
                 <div class="mb-3">
-                    <label class="form-label">Material / Type</label>
-<input type="text" name="fabric" class="form-control" placeholder="e.g. Cotton / Plastic / Liquid" required>              
-  </div>
+                    <label class="form-label">Fabric</label>
+                    <input type="text" name="fabric" class="form-control" required>
+                </div>
 
                 <div class="mb-3">
                     <label class="form-label">Description</label>
@@ -100,7 +109,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Select Category</label>
-                    <select name="categoryid" class="form-select" id="category" required>
+                    <select name="categoryid" class="form-select" required>
                         <option value="">-- Select Category --</option>
                         {% for c in ca %}
                             <option value="{{ c.id }}">{{ c.cname }}</option>
@@ -124,56 +133,5 @@
 
     </div>
 </div>
-<script>
-document.addEventListener("DOMContentLoaded", function () {
 
-    document.getElementById("category").addEventListener("change", function () {
-        let category = this.options[this.selectedIndex].text;
-        let size = document.getElementById("size");
-
-        size.innerHTML = '<option value="">-- Select Size / Variant --</option>';
-
-        if (category === "Men's Wear" || category === "Women's Wear") {
-            size.innerHTML += `
-                <option value="XS">XS</option>
-                <option value="S">S</option>
-                <option value="M">M</option>
-                <option value="L">L</option>
-                <option value="XL">XL</option>
-            `;
-        }
-
-        else if (category === "Kids Wear") {
-            size.innerHTML += `
-                <option value="3-4Y">3-4Y</option>
-                <option value="5-6Y">5-6Y</option>
-            `;
-        }
-
-        else if (category === "Electrical") {
-            size.innerHTML += `
-                <option value="9W">9W</option>
-                <option value="12W">12W</option>
-                <option value="10000mAh">10000mAh</option>
-                <option value="Standard">Standard</option>
-            `;
-        }
-
-        else if (category === "Beauty") {
-            size.innerHTML += `
-                <option value="50ml">50ml</option>
-                <option value="100ml">100ml</option>
-            `;
-        }
-
-        else if (category === "Accessories") {
-            size.innerHTML += `
-                <option value="Free Size">Free Size</option>
-            `;
-        }
-
-    });
-
-});
-</script>
 {% endblock %}
