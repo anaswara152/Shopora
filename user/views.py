@@ -48,32 +48,16 @@ def registration(request):
 from django.db.models import Q
 
 def userhome(request):
-    
-    products = Product.objects.all()
     categories = category.objects.all()
+    
+    # Create a dictionary: category -> products in that category
+    category_products = {}
+    for cat in categories:
+        products_in_cat = Product.objects.filter(categoryid=cat)
+        if products_in_cat.exists():  # Optional: only show if category has products
+            category_products[cat] = products_in_cat
 
-    search = request.GET.get('search')
-    categorys = request.GET.get('category')
-    color = request.GET.get('color')
-    size = request.GET.get('size')
-    gender = request.GET.get('gender')
-
-    is_filtered = False
-
-    if search:
-        products = products.filter(name__icontains=search)
-        is_filtered = True
-
-    if categorys:
-        products = products.filter(categoryid__id=categorys)
-        is_filtered = True
-
-
-    if size:
-        products = products.filter(size__icontains=size)
-        is_filtered = True
-
-
+    # Wishlist for logged-in user
     if request.user.is_authenticated:
         user_wishlist_ids = whislist.objects.filter(
             customerid=request.user
@@ -82,12 +66,9 @@ def userhome(request):
         user_wishlist_ids = []
 
     return render(request, 'user/userhome.html', {
-        'm': products,
-        'categories': categories,
-        'user_wishlist_ids': user_wishlist_ids,
-        'is_filtered': is_filtered
-    })
-    
+        'category_products': category_products,
+        'user_wishlist_ids': user_wishlist_ids
+    })    
 def login_user(request):
     if request.user.is_authenticated:
         if request.user.groups.filter(name="CUSTOMER").exists():
