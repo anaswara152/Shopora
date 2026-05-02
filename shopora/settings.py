@@ -83,7 +83,9 @@ WSGI_APPLICATION = 'shopora.wsgi.application'
 
 DATABASES = {
     'default': dj_database_url.config(
-        default=f"sqlite:///{os.path.join(BASE_DIR, 'db.sqlite3')}"
+        default=os.environ.get("DATABASE_URL"),
+        conn_max_age=600,
+        ssl_require=True
     )
 }
 # Password validation
@@ -141,9 +143,4 @@ print("CLOUD:", os.getenv("CLOUDINARY_CLOUD_NAME"))
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-
-
-
 # https://integos-shopora-web.onrender.com/
